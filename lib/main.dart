@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/pages/edit_profile.dart';
 // 1. TAMBAHKAN baris ini untuk "mengenalkan" file login.dart
+import 'package:flutter_application_1/pages/login.dart';
 import 'package:flutter_application_1/pages/payment.dart';
+import 'package:flutter_application_1/pages/profile.dart';
+import 'package:flutter_application_1/pages/splash_screen.dart';
+import 'package:flutter_application_1/pages/success.dart';
 
 void main() {
   runApp(const MyApp());
@@ -23,7 +28,7 @@ class MyApp extends StatelessWidget {
       // 3. UBAH 'home'
       // Ganti 'const MyHomePage(title: 'Flutter Demo Home Page')'
       // dengan 'const LoginPage()'
-      home: const PaymentPage(),
+      home: const SplashScreen(),
     );
   }
 }
