@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/pages/booking.dart';
 import 'package:flutter_application_1/pages/edit_profile.dart';
 // 1. TAMBAHKAN baris ini untuk "mengenalkan" file login.dart
 import 'package:flutter_application_1/pages/login.dart';
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
       // 3. UBAH 'home'
       // Ganti 'const MyHomePage(title: 'Flutter Demo Home Page')'
       // dengan 'const LoginPage()'
-      home: const SplashScreen(),
+      home: const ProfilePage(),
     );
   }
 }
