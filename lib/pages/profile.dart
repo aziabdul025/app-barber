@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+// 1. IMPORT DITAMBAHKAN UNTUK NAVIGASI
+import 'package:Barber/pages/home.dart';
+import 'package:Barber/pages/booking.dart';
+import 'package:Barber/pages/edit_profile.dart'; // <-- IMPORT BARU DITAMBAHKAN
+import 'package:Barber/pages/login.dart'; // <-- IMPORT BARU UNTUK LOGOUT
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -8,20 +13,53 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  int _selectedIndex = 2;
+  int _selectedIndex = 2; // 2 karena ini Halaman Profil
   bool _isNotificationOn = true;
 
   // ==========================================================
-  // == PERUBAHAN WARNA AGAR SESUAI TEMA ==
+  // == WARNA ==
   // ==========================================================
-  // Mengganti 'darkPurple' dengan 'primaryPurple' yang lebih cerah
-  final Color primaryPurple =
-      const Color.fromARGB(255, 94, 53, 177); // (R:94, G:53, B:177)
+  final Color darkPurple = Color(0xFF2C1E4A);
   final Color lightGray = const Color(0xFFF5F5F5); // Latar belakang abu-abu
   final Color cardWhite = Colors.white;
-  // Warna baru untuk navbar (dari gambar booking)
   final Color inactiveNavColor = const Color(0xFFB3A5D4);
   // ==========================================================
+
+  // 2. FUNGSI NAVIGASI DITAMBAHKAN
+  void _onItemTapped(int index) {
+    // Cek jika pengguna mengetuk tab yang sudah aktif, jangan lakukan apa-apa
+    if (index == _selectedIndex) return;
+
+    // Logika Navigasi
+    switch (index) {
+      case 0:
+        // Pindah ke Halaman Home
+        Navigator.pushReplacement(
+          context,
+          PageRouteBuilder(
+            pageBuilder: (context, animation1, animation2) => const HomePage(),
+            transitionDuration: Duration.zero,
+            reverseTransitionDuration: Duration.zero,
+          ),
+        );
+        break;
+      case 1:
+        // Pindah ke Halaman Booking
+        Navigator.pushReplacement(
+          context,
+          PageRouteBuilder(
+            pageBuilder: (context, animation1, animation2) =>
+                const BookingPage(),
+            transitionDuration: Duration.zero,
+            reverseTransitionDuration: Duration.zero,
+          ),
+        );
+        break;
+      case 2:
+        // Kita sudah di Profile, tidak perlu navigasi
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +70,7 @@ class _ProfilePageState extends State<ProfilePage> {
       backgroundColor: lightGray, // Latar belakang utama
 
       // Bottom Navigation Bar
-      bottomNavigationBar: _buildBottomNav(), // <-- WIDGET INI DIUBAH TOTAL
+      bottomNavigationBar: _buildBottomNav(),
 
       // Kita gunakan Stack untuk menumpuk header dan konten
       body: Stack(
@@ -41,43 +79,26 @@ class _ProfilePageState extends State<ProfilePage> {
           Container(
             height: screenHeight * 0.38,
             decoration: BoxDecoration(
-              color: primaryPurple, // <-- PERUBAHAN: Warna diubah
-              
-              // ===============================================
-              // == PATTERN BACKGROUND (SUDAH SAYA AKTIFKAN) ==
-              // ===============================================
+              color: darkPurple,
               image: const DecorationImage(
-                // <-- PERUBAHAN: Path gambar dikembalikan sesuai permintaan Anda
                 image: AssetImage('assets/images/group.png'),
                 fit: BoxFit.cover,
-                // <-- PERUBAHAN: Opacity 8 tidak valid, diubah ke 0.8
-                opacity: 0.8, 
+                opacity: 0.8,
               ),
-              // ===============================================
-
-              // <-- PERUBAHAN: BorderRadius dihapus agar header lurus
-              // borderRadius: const BorderRadius.only(
-              //   bottomLeft: Radius.circular(40.0),
-              //   bottomRight: Radius.circular(40.0),
-              // ),
             ),
           ),
 
           // === LAYER 2: Info Profil (Avatar, Teks, dll.) ===
-          _buildProfileInfo(), // <-- Ada perubahan di dalam widget ini
+          _buildProfileInfo(),
 
           // === LAYER 3: Konten Setting (Kartu Putih & Tombol) ===
-          // <-- PERUBAHAN BESAR PADA STRUKTUR LAYOUT DI BAWAH INI -->
           Padding(
             padding: EdgeInsets.only(top: (screenHeight * 0.38) - 60),
-            // 1. Ganti SingleChildScrollView menjadi Column
             child: Column(
               children: [
-                // 2. Tambahkan Expanded agar kartu putih memenuhi sisa ruang
                 Expanded(
                   child: Container(
-                    // 3. Pindahkan styling dari _buildSettingsCard ke sini
-                    width: double.infinity, // Memastikan lebar penuh
+                    width: double.infinity,
                     padding: const EdgeInsets.all(24.0),
                     decoration: BoxDecoration(
                       color: cardWhite,
@@ -93,7 +114,6 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ],
                     ),
-                    // 4. Buat Column internal untuk mengatur konten
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -106,8 +126,8 @@ class _ProfilePageState extends State<ProfilePage> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const SizedBox(height: 16),
-                
+                        const SizedBox(height: 14),
+
                         // Opsi "Security"
                         _buildSettingRow(
                           title: 'Security',
@@ -115,13 +135,15 @@ class _ProfilePageState extends State<ProfilePage> {
                             padding: const EdgeInsets.all(4.0),
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              border: Border.all(color: Colors.grey.shade400, width: 1.5),
+                              border: Border.all(
+                                  color: Colors.grey.shade400, width: 1.5),
                             ),
-                            child: Icon(Icons.edit, size: 18, color: Colors.grey[700]),
+                            child: Icon(Icons.edit,
+                                size: 18, color: Colors.grey[700]),
                           ),
                           onTap: () {},
                         ),
-                
+
                         // Opsi "Notification"
                         _buildSettingRow(
                           title: 'Notification',
@@ -132,15 +154,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                 _isNotificationOn = value;
                               });
                             },
-                            activeColor: primaryPurple,
+                            activeColor: darkPurple,
                           ),
                           onTap: null, // Biar tidak ada efek klik
                         ),
-                
-                        // 5. Gunakan Spacer untuk mendorong tombol ke bawah
-                        const Spacer(), 
-                
-                        // 6. Panggil tombol Logout di sini
+
+                        const Spacer(), // Mendorong tombol ke bawah
+
+                        // Tombol Logout
                         _buildLogoutButton(),
                       ],
                     ),
@@ -149,7 +170,6 @@ class _ProfilePageState extends State<ProfilePage> {
               ],
             ),
           ),
-          // <-- AKHIR DARI PERUBAHAN BESAR -->
         ],
       ),
     );
@@ -157,12 +177,11 @@ class _ProfilePageState extends State<ProfilePage> {
 
   // --- WIDGET HELPER DI BAWAH INI ---
 
-  /// WIDGET UNTUK INFO PROFIL (LAYER 2)
+  /// WIDGET UNTUK INFO PROFIL (LAYER 2) - SUDAH DIPERBAIKI
   Widget _buildProfileInfo() {
     return SafeArea(
       bottom: false, // Nonaktifkan SafeArea di bawah
       child: Padding(
-        // <-- PERUBAHAN: Padding atas disesuaikan agar sedikit turun
         padding: const EdgeInsets.only(top: 20.0, left: 24.0, right: 24.0),
         child: Column(
           children: [
@@ -180,87 +199,112 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 IconButton(
                   onPressed: () {},
-                  // <-- PERUBAHAN: Path dan Ukuran dikembalikan sesuai permintaan Anda
                   icon: Image.asset(
-                    'assets/images/gobar_icon.png', // Sesuai kode Anda
-                    width: 80, // Sesuai kode Anda
+                    'assets/images/gobar_icon.png',
+                    width: 80,
                   ),
                 ),
               ],
             ),
-            
-            // <-- PERUBAHAN: Jarak ditambah agar info user turun
-            const SizedBox(height: 50),
+
+            // =========================================================
+            // === PERUBAHAN DI SINI ===
+            // Jarak antara judul "Profile" dan baris Avatar dikurangi
+            // dari 50 menjadi 30.
+            const SizedBox(height: 30), // <-- DIUBAH DARI 50
+            // =========================================================
 
             // Baris Info User (Foto, Nama, Email, Edit)
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                
-                // <-- PERUBAHAN: Menambahkan BORDER PUTIH di avatar
+                // Avatar dengan border putih
                 CircleAvatar(
                   radius: 37, // Radius luar (border)
                   backgroundColor: Colors.white,
                   child: CircleAvatar(
                     radius: 35, // Radius dalam (gambar)
-                    // <-- PERUBAHAN: Path dikembalikan sesuai permintaan Anda
-                    backgroundImage: const AssetImage('assets/images/profile_pattern.png'),
+                    backgroundImage:
+                        const AssetImage('assets/images/profile_pattern.png'),
                     backgroundColor: Colors.white,
                   ),
                 ),
-                // =================================================
-                
+
                 const SizedBox(width: 16),
 
-                // Kolom Nama & Email
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        const Text(
-                          'Jannah',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
+                // === PERBAIKAN 1: BUNGKUS COLUMN DENGAN EXPANDED ===
+                // Ini membuat Column mengambil sisa ruang di antara
+                // Avatar dan Tombol Edit.
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          const Text(
+                            'Jannah',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        const SizedBox(width: 8),
-                        // Badge Platinum
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8.0, vertical: 2.0),
-                          decoration: BoxDecoration(
-                            color: Colors.orange,
-                            borderRadius: BorderRadius.circular(12.0),
+                          const SizedBox(width: 8),
+                          // Badge Platinum
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8.0, vertical: 2.0),
+                            decoration: BoxDecoration(
+                              color: Colors.orange,
+                              borderRadius: BorderRadius.circular(12.0),
+                            ),
+                            child: const Text(
+                              'Platinum',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 12),
+                            ),
                           ),
-                          child: const Text(
-                            'Platinum',
-                            style: TextStyle(color: Colors.white, fontSize: 12),
+                        ],
+                      ),
+                      const SizedBox(height: 4),
+                      Row(
+                        children: [
+                          const Icon(Icons.email_outlined,
+                              color: Colors.white70, size: 16),
+                          const SizedBox(width: 8),
+
+                          // === PERBAIKAN 2: BUNGKUS TEXT DENGAN EXPANDED ===
+                          // Ini membuat teks email terpotong (...)
+                          // jika terlalu panjang.
+                          Expanded(
+                            child: Text(
+                              'Joesamanta@gmail.com',
+                              style:
+                                  TextStyle(color: Colors.white70, fontSize: 14),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 4),
-                    Row(
-                      children: [
-                        const Icon(Icons.email_outlined,
-                            color: Colors.white70, size: 16),
-                        const SizedBox(width: 8),
-                        Text(
-                          'Joesamanta@gmail.com',
-                          style: TextStyle(color: Colors.white70, fontSize: 14),
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-                const Spacer(), // Mendorong ikon ke kanan
+
+                // === PERBAIKAN 3: HAPUS SPACER ===
+                // const Spacer(), // Tidak lagi diperlukan karena Column sudah di-Expanded
+
                 // Tombol Edit
                 IconButton(
-                  onPressed: () {},
-                  // <-- PERUBAHAN: Ikon dikembalikan ke 'edit' sesuai kode Anda
+                  onPressed: () {
+                    // === NAVIGASI KE EDIT PROFILE DITAMBAHKAN ===
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const EditProfilePage()),
+                    );
+                    // ==========================================
+                  },
                   icon: const Icon(Icons.edit, color: Colors.white),
                 ),
               ],
@@ -271,24 +315,24 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  // <-- PERUBAHAN: Widget _buildSettingsCard() dihapus karena logikanya dipindah
-  /*
-  /// WIDGET UNTUK KARTU SETTING (LAYER 3, BAGIAN 1)
-  Widget _buildSettingsCard() {
-    ...
-  }
-  */
-
-  /// WIDGET UNTUK TOMBOL LOGOUT (LAYER 3, BAGIAN 2)
+  /// WIDGET UNTUK TOMBOL LOGOUT
   Widget _buildLogoutButton() {
-    // <-- PERUBAHAN: Padding dihapus karena sudah di-handle oleh padding kartu
     return SizedBox(
       width: double.infinity,
       height: 50,
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: () {
+          // === NAVIGASI KE LOGIN PAGE DITAMBAHKAN ===
+          // Kita gunakan pushReplacement agar pengguna tidak bisa kembali
+          // ke halaman profile setelah logout.
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const LoginPage()),
+          );
+          // =======================================
+        },
         style: ElevatedButton.styleFrom(
-          backgroundColor: primaryPurple, // <-- PERUBAHAN: Warna diubah
+          backgroundColor: darkPurple,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12.0),
           ),
@@ -333,9 +377,6 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  // ==========================================================
-  // == PERUBAHAN TOTAL PADA WIDGET INI ==
-  // ==========================================================
   /// WIDGET HELPER UNTUK BOTTOM NAV BAR (Sesuai tema)
   Widget _buildBottomNav() {
     return ClipRRect(
@@ -367,18 +408,14 @@ class _ProfilePageState extends State<ProfilePage> {
               label: 'Profile',
             ),
           ],
-          currentIndex: _selectedIndex,
+          currentIndex: _selectedIndex, // 2 (Profil)
           backgroundColor: Colors.transparent,
-          selectedItemColor: primaryPurple, // Teks & Ikon Aktif Ungu
+          selectedItemColor: darkPurple, // Teks & Ikon Aktif Ungu
           unselectedItemColor: inactiveNavColor, // Teks & Ikon Non-Aktif
-          onTap: (int index) {
-            setState(() {
-              _selectedIndex = index;
-              // Disarankan tambahkan navigasi di sini
-              // if (index == 0) Navigator.pushReplacementNamed(context, '/home');
-              // if (index == 1) Navigator.pushReplacementNamed(context, '/booking');
-            });
-          },
+
+          // 3. ONTAP DIPERBARUI UNTUK NAVIGASI
+          onTap: _onItemTapped,
+
           type: BottomNavigationBarType.fixed,
           selectedFontSize: 12.0,
           unselectedFontSize: 12.0,
@@ -388,4 +425,3 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 }
-

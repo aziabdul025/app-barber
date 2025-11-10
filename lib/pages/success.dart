@@ -1,6 +1,7 @@
-// ================== PERBAIKAN DI SINI ==================
-import 'package:flutter/material.dart'; // <-- Pastikan pakai TITIK DUA (:)
-// =======================================================
+import 'package:flutter/material.dart';
+// === 1. TAMBAHKAN IMPORT UNTUK HOME PAGE ===
+// (Pastikan path dan nama file/class sudah benar)
+import 'package:Barber/pages/home.dart';
 
 class SuccessPage extends StatelessWidget {
   const SuccessPage({super.key});
@@ -8,7 +9,7 @@ class SuccessPage extends StatelessWidget {
   // Warna ungu tua dari desain
   final Color darkPurple = const Color(0xFF2C1E4A);
   // Warna ungu yang sedikit lebih terang
-  final Color lightPurple = const Color(0xFF4A3482); 
+  final Color lightPurple = const Color(0xFF4A3482);
 
   @override
   Widget build(BuildContext context) {
@@ -29,20 +30,31 @@ class SuccessPage extends StatelessWidget {
             // Biarkan rata kiri untuk tombol "Go back"
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              
               // 2. App Bar Kustom
               Padding(
                 // Tambahkan padding 'top' agar tombol sedikit turun
-                padding: const EdgeInsets.only(left: 16.0, top: 20.0, right: 16.0),
+                padding:
+                    const EdgeInsets.only(left: 16.0, top: 20.0, right: 16.0),
                 child: Row(
                   children: [
                     // Tombol "Go back"
                     TextButton.icon(
                       onPressed: () {
-                        // Aksi untuk kembali, misalnya ke halaman utama
-                        // Navigator.pop(context);
+                        // === 2. PERUBAHAN NAVIGASI KE HOME PAGE ===
+                        // Aksi untuk kembali ke Halaman Utama dan menghapus
+                        // semua halaman di belakangnya (Payment, Booking, dll)
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            // Pastikan Anda punya class HomePage
+                            builder: (context) => const HomePage(),
+                          ),
+                          (Route<dynamic> route) =>
+                              false, // Ini menghapus semua route
+                        );
                       },
-                      icon: const Icon(Icons.arrow_back_ios, color: Colors.white, size: 18),
+                      icon: const Icon(Icons.arrow_back_ios,
+                          color: Colors.white, size: 18),
                       label: const Text(
                         'Go back',
                         style: TextStyle(color: Colors.white, fontSize: 16),
@@ -56,7 +68,7 @@ class SuccessPage extends StatelessWidget {
                   ],
                 ),
               ),
-              
+
               // 3. Konten Utama (Icon dan Teks)
               // Kita ganti 'Center' dengan Column + Spacer
               Expanded(
@@ -69,7 +81,7 @@ class SuccessPage extends StatelessWidget {
 
                     // --- Konten Utama ---
                     const Icon(
-                      Icons.verified, 
+                      Icons.verified,
                       color: Colors.white,
                       size: 120.0,
                     ),

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-
+// === 1. TAMBAHKAN IMPORT UNTUK SUCCESS PAGE ===
+// (Pastikan path dan nama file/class sudah benar)
+import 'package:Barber/pages/success.dart'; // Ganti jika namanya beda
 class PaymentPage extends StatefulWidget {
   const PaymentPage({super.key});
-
   @override
   State<PaymentPage> createState() => _PaymentPageState();
 }
@@ -10,7 +11,6 @@ class PaymentPage extends StatefulWidget {
 class _PaymentPageState extends State<PaymentPage> {
   // State untuk melacak item mana yang aktif di bottom nav bar
   int _selectedIndex = 1; // 0=Home, 1=Booking, 2=Profile
-
   // Warna ungu tua dari desain
   final Color darkPurple = const Color(0xFF2C1E4A);
 
@@ -26,12 +26,12 @@ class _PaymentPageState extends State<PaymentPage> {
         leading: IconButton(
           icon: const Icon(Icons.close, color: Colors.white),
           onPressed: () {
-            // Aksi untuk tombol close, misalnya kembali ke halaman sebelumnya
-            // Navigator.pop(context);
+            // === 2. AKSI TOMBOL CLOSE (KEMBALI KE HALAMAN SEBELUMNYA) ===
+            // Ini akan kembali ke halaman dari mana Anda datang (misalnya BookingPage)
+            Navigator.pop(context);
           },
         ),
       ),
-
       // 2. Body Halaman
       body: SafeArea(
         child: Padding(
@@ -50,8 +50,8 @@ class _PaymentPageState extends State<PaymentPage> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 32), // Jarak
 
+              const SizedBox(height: 32), // Jarak
               // Judul Grup
               Text(
                 'Bank Deposit',
@@ -60,21 +60,28 @@ class _PaymentPageState extends State<PaymentPage> {
                   fontSize: 16,
                 ),
               ),
+
               const SizedBox(height: 16), // Jarak
-
               // 3. Opsi Pembayaran (kita buat widget sendiri di bawah)
-
               // Opsi "Cash"
               _buildPaymentOption(
                 // Menggunakan Image.asset dengan path yang benar
                 iconWidget: Image.asset(
                   'assets/images/cash.png', // Pastikan path ini benar
-                  width: 28, 
+                  width: 28,
                   height: 28,
                 ),
+
                 title: 'Cash',
                 onTap: () {
-                  // Aksi saat "Cash" diklik
+                  // === 3. AKSI SAAT "CASH" DIKLIK (NAVIGASI KE SUCCESS) ===
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      // Pastikan Anda punya class bernama SuccessPage
+                      builder: (context) => const SuccessPage(),
+                    ),
+                  );
                 },
               ),
 
@@ -87,65 +94,18 @@ class _PaymentPageState extends State<PaymentPage> {
                 ),
                 title: 'Qris',
                 onTap: () {
-                  // Aksi saat "Qris" diklik
+                  // Aksi saat "Qris" diklik (bisa ditambahkan nanti)
                 },
               ),
             ],
           ),
         ),
       ),
-
-      // ================== PERUBAHAN DI SINI ==================
-      // 4. Bottom Navigation Bar dengan Tinggi Kustom
-      bottomNavigationBar: ClipRRect(
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(20.0),
-          topRight: Radius.circular(20.0),
-        ),
-        // 1. Bungkus dengan Container
-        child: Container(
-          height: 80.0, // 2. Atur tinggi di sini (misal: 80)
-          color: Colors.white, // 3. Pindahkan warna ke Container
-          child: BottomNavigationBar(
-            items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home_outlined),
-                activeIcon: Icon(Icons.home), // Ikon saat aktif
-                label: 'Home',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.calendar_today_outlined),
-                activeIcon: Icon(Icons.calendar_today),
-                label: 'Booking',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.person_outline),
-                activeIcon: Icon(Icons.person),
-                label: 'Profile',
-              ),
-            ],
-            currentIndex: _selectedIndex,
-            // 4. Atur warna Nav Bar jadi transparan agar warna Container terlihat
-            backgroundColor: Colors.transparent, 
-            selectedItemColor: Colors.grey[800], 
-            unselectedItemColor: Colors.grey[400], 
-            onTap: (int index) {
-              setState(() {
-                _selectedIndex = index;
-              });
-            },
-            type: BottomNavigationBarType.fixed, 
-            selectedFontSize: 12.0,
-            unselectedFontSize: 12.0,
-            elevation: 0, // 5. Pastikan elevation 0
-          ),
-        ),
-      ),
-      // =======================================================
     );
   }
 
   /// Widget helper untuk membuat baris opsi pembayaran
+
   Widget _buildPaymentOption({
     required Widget iconWidget,
     required String title,
@@ -158,11 +118,14 @@ class _PaymentPageState extends State<PaymentPage> {
         child: Row(
           children: [
             // Ikon
+
             SizedBox(
               width: 30, // Beri lebar agar ikon rata
               child: iconWidget,
             ),
+
             const SizedBox(width: 16),
+
             // Teks
             Text(
               title,
@@ -171,9 +134,13 @@ class _PaymentPageState extends State<PaymentPage> {
                 fontSize: 18,
               ),
             ),
+
             // Spacer untuk mendorong panah ke kanan
+
             const Spacer(),
+
             // Ikon Panah
+
             Icon(
               Icons.chevron_right,
               color: Colors.white.withOpacity(0.5),

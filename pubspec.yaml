@@ -1,5 +1,5 @@
-name: flutter_application_1
-description: "A new Flutter project."
+name: "Barber"
+description: "BARBER"
 publish_to: 'none'
 version: 1.0.0+1
 
@@ -8,11 +8,11 @@ environment:
 
 dependencies:
   flutter:
-    sdk: flutter
-  
-  # 'assets:' SUDAH DIHAPUS DARI SINI
+    sdk: flutter 
 
   cupertino_icons: ^1.0.6
+  flutter_launcher_icons: ^0.14.4
+  flutter_svg: ^2.0.10+1
 
 dev_dependencies:
   flutter_test:
@@ -20,18 +20,34 @@ dev_dependencies:
     
   flutter_lints: ^3.0.0
 
-# Bagian ini adalah bagian yang benar
+# Bagian konfigurasi Flutter
 flutter:
   uses-material-design: true
 
-  # ============================================
-  # SAYA PINDAHKAN KE SINI
-  # Ini adalah lokasi yang benar
+  # Ini adalah lokasi yang benar untuk assets
   assets:
     - assets/images/
-  # ============================================
 
   # fonts:
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf
+
+# ============================================
+# INI ADALAH POSISI YANG BENAR
+flutter_launcher_icons:
+  # 'android: true' CUKUP SATU KALI DI SINI
+  android: true 
+  ios: true
+  
+  # Ini untuk iOS dan Android versi lama
+  image_path: "assets/images/gobar_icon.png" 
+
+  # --- Bagian untuk Adaptive Icon Android ---
+  # 'android: "true"' YANG SEBELUMNYA DI SINI SUDAH DIHAPUS
+  # Warna background ungu
+  adaptive_icon_background: "#8A2BE2" 
+
+  # Gambar foreground (pastikan background-nya transparan)
+  adaptive_icon_foreground: "assets/images/gobar_icon.png"
+# ============================================

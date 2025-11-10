@@ -17,7 +17,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   final TextEditingController _passwordController = TextEditingController();
 
   // Definisikan warna ungu
-  final Color darkPurple = const Color(0xFF2C1E4A);
+  final Color darkPurple =  Color(0xFF2C1E4A);
   // Definisikan warna abu-abu muda untuk background
   final Color lightGrayBg = const Color(0xFFF5F5F5);
 

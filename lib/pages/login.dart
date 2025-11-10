@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:Barber/pages/home.dart'; // <-- 1. IMPORT DITAMBAHKAN
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -165,7 +166,7 @@ class _LoginPageState extends State<LoginPage> {
                                         _rememberMe = value ?? false;
                                       });
                                     },
-                                    activeColor: Colors.blue,
+                                    activeColor: Colors.purple,
                                     checkColor: Colors.white,
                                     side: const BorderSide(color: Colors.white54),
                                     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -188,8 +189,8 @@ class _LoginPageState extends State<LoginPage> {
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
                               colors: [
-                                Colors.blue.shade600,
-                                Colors.blue.shade400,
+                                const Color.fromARGB(255, 164, 76, 242),
+                                const Color.fromARGB(255, 152, 68, 224),
                               ],
                               begin: Alignment.centerLeft,
                               end: Alignment.centerRight,
@@ -197,7 +198,16 @@ class _LoginPageState extends State<LoginPage> {
                             borderRadius: BorderRadius.circular(10.0),
                           ),
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              // --- 2. NAVIGASI DITAMBAHKAN ---
+                              // Menggunakan pushReplacement agar pengguna tidak bisa "kembali"
+                              // ke halaman login setelah berhasil login.
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(builder: (context) => const HomePage()),
+                              );
+                              // --------------------------------
+                            },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.transparent,
                               shadowColor: Colors.transparent,

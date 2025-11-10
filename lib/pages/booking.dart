@@ -1,5 +1,11 @@
+import 'package:Barber/pages/booking.detail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:Barber/pages/home.dart';
+import 'package:Barber/pages/profile.dart';
+// === 1. TAMBAHKAN IMPORT UNTUK PAYMENT PAGE ===
+// (Pastikan path dan nama file/class sudah benar)
+import 'package:Barber/pages/booking.detail.dart';
 
 class BookingPage extends StatefulWidget {
   const BookingPage({super.key});
@@ -9,27 +15,27 @@ class BookingPage extends StatefulWidget {
 }
 
 class _BookingPageState extends State<BookingPage> {
-  int _selectedIndex = 1;
+  int _selectedIndex = 1; // 1 karena ini halaman Booking
   int _selectedTabIndex = 0;
 
   // ==========================================================
-  // == PASTIKAN WARNA INI SESUAI DENGAN GAMBAR ANDA ==
+  // == WARNA ==
   // ==========================================================
-
-  // <-- PERBAIKAN DI SINI: Menambahkan primaryPurple dengan format ARGB
-  final Color primaryPurple =
-      const Color.fromARGB(255, 94, 53, 177); // Ini adalah (R:94, G:53, B:177)
-
+  final Color darkPurple =  
+  Color(0xFF2C1E4A);
   final Color lightPurple =
       const Color(0xFFEDE7F6); // Ungu muda untuk background Tab
   final Color white = Colors.white;
-  // <-- PERBAIKAN DI SINI: Mengembalikan ke abu-abu yang lebih sesuai
   final Color greyText = Colors.grey.shade600;
   final Color darkText = Colors.black87;
+
+  // === PERUBAHAN 1: Tambahkan 2 variabel warna ini agar sama dengan Home/Profile ===
+  final Color cardWhite = Colors.white;
+  final Color inactiveNavColor = const Color(0xFFB3A5D4);
   // ==========================================================
 
   // ==========================================================
-  // == PASTIKAN PATH GAMBAR INI BENAR-BENAR ADA DI PROYEK ANDA ==
+  // == DATA (PASTIKAN PATH GAMBAR BENAR) ==
   // ==========================================================
   final List<Map<String, String>> services = [
     {
@@ -55,33 +61,58 @@ class _BookingPageState extends State<BookingPage> {
   ];
   // ==========================================================
 
+  void _onItemTapped(int index) {
+    if (index == _selectedIndex) return;
+
+    switch (index) {
+      case 0:
+        Navigator.pushReplacement(
+          context,
+          PageRouteBuilder(
+            pageBuilder: (context, animation1, animation2) => const HomePage(),
+            transitionDuration: Duration.zero,
+            reverseTransitionDuration: Duration.zero,
+          ),
+        );
+        break;
+      case 1:
+        break;
+      case 2:
+        Navigator.pushReplacement(
+          context,
+          PageRouteBuilder(
+            pageBuilder: (context, animation1, animation2) =>
+                const ProfilePage(),
+            transitionDuration: Duration.zero,
+            reverseTransitionDuration: Duration.zero,
+          ),
+        );
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:
-          white, // <-- PERBAIKAN DI SINI: Background harusnya putih, bukan transparan
+      backgroundColor: white,
       appBar: AppBar(
-        backgroundColor: primaryPurple, // AppBar Ungu
-        foregroundColor: white, // Teks & Ikon AppBar Putih
+        backgroundColor: darkPurple,
+        foregroundColor: white,
         title: const Text('Booking'),
+        automaticallyImplyLeading: false,
         actions: [
           IconButton(
             onPressed: () {},
-            // ==========================================================
-            // == PASTIKAN FILE INI ADA DI assets/images/ ==
-            // ==========================================================
             icon: Image.asset(
-              // <-- PERBAIKAN DI SINI: Gunakan ikon versi putih agar terlihat di AppBar ungu
               'assets/images/gobar_icon.png',
               width: 80,
             ),
-            // ==========================================================
             constraints: const BoxConstraints(),
             padding: const EdgeInsets.only(right: 16.0),
           ),
         ],
       ),
-      bottomNavigationBar: _buildBottomNav(),
+      bottomNavigationBar: _buildBottomNav(), // <-- Ini akan memanggil versi baru
       body: Column(
         children: [
           _buildTabBar(),
@@ -103,7 +134,7 @@ class _BookingPageState extends State<BookingPage> {
       child: Container(
         height: 45,
         decoration: BoxDecoration(
-          color: lightPurple, // Background Tab Ungu Muda
+          color: lightPurple,
           borderRadius: BorderRadius.circular(25.0),
         ),
         child: Row(
@@ -128,13 +159,11 @@ class _BookingPageState extends State<BookingPage> {
         },
         child: Container(
           decoration: BoxDecoration(
-            color: isSelected ? white : Colors.transparent, // Tab aktif Putih
+            color: isSelected ? white : Colors.transparent,
             borderRadius: BorderRadius.circular(25.0),
-            // Ini adalah bagian penting untuk efek "pop-up"
             boxShadow: isSelected
                 ? [
                     BoxShadow(
-                      // <-- PERBAIKAN DI SINI: Shadow harusnya abu-abu, bukan putih
                       color: Colors.grey.withOpacity(0.3),
                       spreadRadius: 1,
                       blurRadius: 5,
@@ -147,7 +176,7 @@ class _BookingPageState extends State<BookingPage> {
             child: Text(
               text,
               style: TextStyle(
-                color: isSelected ? darkText : greyText, // Teks aktif Hitam
+                color: isSelected ? darkText : greyText,
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                 fontSize: 14,
               ),
@@ -208,41 +237,51 @@ class _BookingPageState extends State<BookingPage> {
   }
 
   /// WIDGET HELPER UNTUK ITEM LAYANAN (MENGGUNAKAN GAMBAR ASLI)
+  // === 2. PERUBAHAN PADA FUNGSI INI ===
   Widget _buildServiceItem(
       {required String imagePath,
       required String title,
       required String subtitle}) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 20.0),
-      child: Row(
-        children: [
-          // ==========================================================
-          // == Ini akan memuat gambar dari path yang Anda definisikan ==
-          // ==========================================================
-          CircleAvatar(
-            radius: 25,
-            backgroundImage: AssetImage(imagePath), // <-- Ini memuat gambar
-            backgroundColor:
-                Colors.grey[200], // Background jika gambar gagal dimuat
+    // Dibungkus dengan InkWell agar bisa di-klik dan ada efek ripple
+    return InkWell(
+      onTap: () {
+        // === INI ADALAH LOGIKA NAVIGASI KE PAYMENT PAGE ===
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            // Pastikan Anda punya class bernama PaymentPage di payment.dart
+            builder: (context) => const BookingDetailScreen(),
           ),
-          // ==========================================================
-          const SizedBox(width: 15),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: TextStyle(
-                    fontSize: 16, fontWeight: FontWeight.bold, color: darkText),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                subtitle,
-                style: TextStyle(fontSize: 14, color: greyText),
-              ),
-            ],
-          )
-        ],
+        );
+      },
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 20.0), // Padding tetap di dalam
+        child: Row(
+          children: [
+            CircleAvatar(
+              radius: 25,
+              backgroundImage: AssetImage(imagePath), // <-- Ini memuat gambar
+              backgroundColor:
+                  Colors.grey[200], // Background jika gambar gagal dimuat
+            ),
+            const SizedBox(width: 15),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.bold, color: darkText),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  subtitle,
+                  style: TextStyle(fontSize: 14, color: greyText),
+                ),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
@@ -257,65 +296,49 @@ class _BookingPageState extends State<BookingPage> {
     );
   }
 
-  /// WIDGET HELPER UNTUK BOTTOM NAV BAR
- /// WIDGET HELPER UNTUK BOTTOM NAV BAR
+  // === PERUBAHAN 2: GANTI SELURUH FUNGSI _buildBottomNav DI BAWAH INI ===
+  /// WIDGET HELPER UNTUK BOTTOM NAV BAR (Sesuai tema Home/Profile)
   Widget _buildBottomNav() {
-    // Kita bungkus semua dengan Column
-    return Column(
-      mainAxisSize: MainAxisSize.min, // PENTING: Agar Column tidak memenuhi layar
-      children: [
-        
-        // 1. INI ADALAH GARIS LURUSNYA
-        Container(
-          height: 1.0, // Ketebalan garis
-          color: Colors.grey[300], // Warna garis, bisa disesuaikan
-        ),
-
-        // 2. Ini adalah kode navbar Anda yang sudah ada
-        ClipRRect(
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(40.0),
-            topRight: Radius.circular(40.0),
-          ),
-          child: Container(
-            height: 80.0,
-            color: white, // Background Bottom Nav Putih
-            child: BottomNavigationBar(
-              items: <BottomNavigationBarItem>[
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.home_outlined, color: greyText),
-                  activeIcon:
-                      Icon(Icons.home, color: primaryPurple), // Ikon Aktif Ungu
-                  label: 'Home',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.calendar_today_outlined, color: greyText),
-                  activeIcon: Icon(Icons.calendar_today, color: primaryPurple),
-                  label: 'Booking',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.person_outline, color: greyText),
-                  activeIcon: Icon(Icons.person, color: primaryPurple),
-                  label: 'Profile',
-                ),
-              ],
-              currentIndex: _selectedIndex,
-              backgroundColor: Colors.transparent,
-              selectedItemColor: primaryPurple, // Teks Aktif Ungu
-              unselectedItemColor: greyText,
-              onTap: (int index) {
-                setState(() {
-                  _selectedIndex = index;
-                });
-              },
-              type: BottomNavigationBarType.fixed,
-              selectedFontSize: 12.0,
-              unselectedFontSize: 12.0,
-              elevation: 0,
+    return ClipRRect(
+      borderRadius: const BorderRadius.only(
+        topLeft: Radius.circular(20.0),
+        topRight: Radius.circular(20.0),
+      ),
+      child: Container(
+        height: 80.0,
+        color: cardWhite, // Background Bottom Nav Putih
+        child: BottomNavigationBar(
+          items: const <BottomNavigationBarItem>[
+            // --- ITEM HOME ---
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home_rounded), // Ikon sesuai gambar
+              activeIcon: Icon(Icons.home_rounded),
+              label: 'Home',
             ),
-          ),
+            // --- ITEM BOOKING ---
+            BottomNavigationBarItem(
+              icon: Icon(Icons.calendar_today_outlined),
+              activeIcon: Icon(Icons.calendar_today),
+              label: 'Booking',
+            ),
+            // --- ITEM PROFILE ---
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person_outline),
+              activeIcon: Icon(Icons.person),
+              label: 'Profile',
+            ),
+          ],
+          currentIndex: _selectedIndex, // Ini akan menggunakan state (1)
+          backgroundColor: Colors.transparent,
+          selectedItemColor: darkPurple, // Teks & Ikon Aktif Ungu
+          unselectedItemColor: inactiveNavColor, // Teks & Ikon Non-Aktif
+          onTap: _onItemTapped, // Panggil fungsi navigasi
+          type: BottomNavigationBarType.fixed,
+          selectedFontSize: 12.0,
+          unselectedFontSize: 12.0,
+          elevation: 0,
         ),
-      ],
+      ),
     );
   }
 }
